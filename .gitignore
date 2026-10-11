@@ -1,0 +1,6 @@
+.DS_Store
+*.pyc
+__pycache__/
+generate_videos.py
+generate_veo.py
+GOOGLE_VEO_HINDI_PROMPTS.md
