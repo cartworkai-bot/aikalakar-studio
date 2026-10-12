@@ -889,7 +889,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const projectDescTextarea = document.getElementById('project-desc');
 
     if (projectTypeSelect && categoryValue) {
-      projectTypeSelect.value = categoryValue;
+      const mapping = {
+        'ai-video-ads': 'ai-video-making',
+        'product-films': 'ai-video-making',
+        'brand-campaigns': 'ai-video-making',
+        'corporate-films': 'video-editing',
+        'social-media': 'ai-video-making',
+        'voiceover': 'audio-generation',
+        'video-editing': 'video-editing',
+        'ai-video-making': 'ai-video-making',
+        'audio-generation': 'audio-generation',
+        'song-music-generation': 'song-music-generation',
+        'image-restoration': 'image-restoration'
+      };
+      projectTypeSelect.value = mapping[categoryValue] || categoryValue;
     }
 
     if (projectDescTextarea && initialMessage && !projectDescTextarea.value) {

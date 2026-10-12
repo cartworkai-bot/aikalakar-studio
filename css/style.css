@@ -1262,6 +1262,19 @@ h1, h2, h3, h4, h5, h6 {
     grid-template-columns: repeat(3, 1fr);
     gap: 1.75rem;
   }
+  .services-grid-5 {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1.75rem;
+  }
+  .services-grid-5 .service-card:nth-child(1),
+  .services-grid-5 .service-card:nth-child(2) {
+    grid-column: span 3;
+  }
+  .services-grid-5 .service-card:nth-child(3),
+  .services-grid-5 .service-card:nth-child(4),
+  .services-grid-5 .service-card:nth-child(5) {
+    grid-column: span 2;
+  }
 }
 
 .service-card {
