@@ -793,12 +793,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = (typeof project === 'object' && project !== null) ? project : PROJECTS_DATA[project];
     if (!data) return;
 
-    if (modalCategory) modalCategory.textContent = data.category || 'Commercial Film';
+    if (modalCategory) modalCategory.textContent = `${data.category || 'Commercial Film'} · 100% AI Generated`;
     if (modalDuration) modalDuration.textContent = data.duration || '0:10 · Cinema Master';
     if (modalTitle) modalTitle.textContent = data.title || 'AIKALAKAR™ Commercial Film';
     if (modalNarrative) modalNarrative.textContent = data.narrative || 'High-fidelity commercial production directed and synthesized by AIKALAKAR™ proprietary neural pipeline.';
     if (modalDirection) modalDirection.textContent = data.direction || '35mm anamorphic prime lenses, photoreal lighting, and high-speed motion tracking.';
-    if (modalEngine) modalEngine.textContent = data.engine || 'AIKALAKAR™ Proprietary Neural Production Pipeline';
+    if (modalEngine) modalEngine.textContent = 'AIKALAKAR™ Proprietary Neural Studio (100% AI Generated)';
     if (modalColor) modalColor.textContent = data.color || 'DaVinci Resolve 35mm Master';
     if (modalSound) modalSound.textContent = data.sound || 'Mastered Spatial Foley & Cinematic Sound Design';
 
@@ -1835,12 +1835,13 @@ document.addEventListener('DOMContentLoaded', () => {
       card.innerHTML = `
         <div class="vault-card-media">
           <video class="vault-card-video" data-src="${film.videoUrl}" muted loop playsinline preload="none"></video>
-          <div class="vault-card-badge">${film.category}</div>
+          <div class="vault-card-badge">100% AI GENERATED · ${film.category}</div>
           <div class="vault-card-play-icon" aria-hidden="true">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
           </div>
           <!-- Hover Popup: Title & What the video is about -->
           <div class="vault-card-popup">
+            <div style="font-size: 0.65rem; color: var(--gold-accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.2rem;">★ 100% AI Video Production</div>
             <div class="vault-popup-title">${escapeHtml(film.title)}</div>
             <div class="vault-popup-context">${escapeHtml(film.tagline)}</div>
             <div class="vault-popup-cta">
