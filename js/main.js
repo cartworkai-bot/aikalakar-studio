@@ -811,10 +811,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (modalVideo) {
+      modalVideo.pause();
+      modalVideo.currentTime = 0;
+      modalVideo.preload = 'auto';
       modalVideo.src = data.videoUrl;
-      modalVideo.poster = data.poster || '';
+      if (data.poster) modalVideo.poster = data.poster;
       modalVideo.load();
-      modalVideo.play().catch(() => {});
+      const playPromise = modalVideo.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {});
+      }
     }
 
     if (modalInquireBtn) {
@@ -1828,7 +1834,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       card.innerHTML = `
         <div class="vault-card-media">
-          <video class="vault-card-video" src="${film.videoUrl}" muted loop playsinline preload="metadata"></video>
+          <video class="vault-card-video" data-src="${film.videoUrl}" muted loop playsinline preload="none"></video>
           <div class="vault-card-badge">${film.category}</div>
           <div class="vault-card-play-icon" aria-hidden="true">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
@@ -1847,22 +1853,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const video = card.querySelector('.vault-card-video');
 
-      // Live hover preview playback
-      card.addEventListener('mouseenter', () => {
-        if (video) {
-          const playPromise = video.play();
-          if (playPromise !== undefined) {
-            playPromise.catch(() => {});
-          }
+      // Live hover preview playback with instant demand loading
+      const startPreview = () => {
+        if (!video) return;
+        if (!video.src) {
+          video.src = video.getAttribute('data-src');
+          video.load();
         }
-      });
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {});
+        }
+      };
 
-      card.addEventListener('mouseleave', () => {
-        if (video) {
-          video.pause();
-          video.currentTime = 0;
-        }
-      });
+      const stopPreview = () => {
+        if (!video) return;
+        video.pause();
+        video.currentTime = 0;
+      };
+
+      card.addEventListener('mouseenter', startPreview);
+      card.addEventListener('mouseleave', stopPreview);
 
       // Big Screen Cinema Lightbox Modal Click
       card.addEventListener('click', () => {
@@ -1878,6 +1889,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
       vaultGrid.appendChild(card);
     });
+
+    // Progressive Viewport Pre-warming: only load metadata when scrolled near viewport
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const vid = entry.target.querySelector('.vault-card-video');
+            if (vid && !vid.src) {
+              vid.src = vid.getAttribute('data-src');
+              vid.preload = 'metadata';
+            }
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '300px 0px' });
+
+      vaultGrid.querySelectorAll('.vault-card').forEach(card => observer.observe(card));
+    }
   }
 
   // Filter Buttons Handler
