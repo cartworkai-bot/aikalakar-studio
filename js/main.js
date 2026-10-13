@@ -872,6 +872,47 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ── 4. SERVICE CARDS & QUICK INQUIRY ──
+  // Top 5 Core Production Pillars Quick Selector
+  const heroPillarBtns = document.querySelectorAll('.hero-pillar-btn');
+  heroPillarBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = btn.getAttribute('data-service-target');
+      const serviceId = btn.getAttribute('data-service-id');
+      const serviceName = btn.getAttribute('data-service-name');
+
+      const targetCard = document.getElementById(targetId);
+      if (targetCard) {
+        const headerOffset = 100;
+        const elementPosition = targetCard.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+
+        // Trigger luxury golden spotlight glow
+        document.querySelectorAll('.service-card').forEach(c => c.classList.remove('card-highlight-active'));
+        setTimeout(() => {
+          targetCard.classList.add('card-highlight-active');
+        }, 350);
+        setTimeout(() => {
+          targetCard.classList.remove('card-highlight-active');
+        }, 3200);
+      }
+
+      // Pre-select service in Contact inquiry dropdown
+      const projectTypeSelect = document.getElementById('project-type');
+      if (projectTypeSelect && serviceId) {
+        projectTypeSelect.value = serviceId;
+      }
+      const projectDescTextarea = document.getElementById('project-desc');
+      if (projectDescTextarea && !projectDescTextarea.value) {
+        projectDescTextarea.value = `I would like to explore creative production for: ${serviceName}`;
+      }
+    });
+  });
+
   const serviceInquireLinks = document.querySelectorAll('.service-inquire-link');
   serviceInquireLinks.forEach(link => {
     link.addEventListener('click', (e) => {
